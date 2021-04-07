@@ -1,6 +1,8 @@
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import logo from './trivia.png';
 import './App.css';
+import Login from './pages/login';
 
 export default function App() {
   return (
@@ -10,6 +12,9 @@ export default function App() {
         <p>
           SUA VEZ
         </p>
+        <Switch>
+          <Route exact path="/" component={ Login } />
+        </Switch>
       </header>
     </div>
   );
