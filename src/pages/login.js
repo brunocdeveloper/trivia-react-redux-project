@@ -5,7 +5,7 @@ class Login extends React.Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
-    this.validadeFields = this.validadeFields.bind(this);
+    this.btnValidadeFields = this.btnValidadeFields.bind(this);
 
     this.state = {
       name: '',
@@ -18,7 +18,7 @@ class Login extends React.Component {
     const { name, value } = target;
     this.setState({
       [name]: value,
-    }, () => this.validadeFields());
+    }, () => this.btnValidadeFields());
   }
 
   btnValidadeFields() {
