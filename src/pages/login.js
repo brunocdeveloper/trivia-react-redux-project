@@ -1,17 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { userLogin } from '../redux/actions/index';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.btnValidadeFields = this.btnValidadeFields.bind(this);
-
     this.state = {
       name: '',
       email: '',
       btnValidadeFields: true,
+      redirect: false,
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.btnValidadeFields = this.btnValidadeFields.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange({ target }) {
@@ -36,8 +42,19 @@ class Login extends React.Component {
     }
   }
 
+  handleClick(name, email) {
+    const { dispatchUserLogin } = this.props;
+    dispatchUserLogin(name, email);
+    this.setState({
+      redirect: true,
+    });
+  }
+
   render() {
-    const { name, email, btnValidadeFields } = this.state;
+    const { name, email, btnValidadeFields, redirect } = this.state;
+    if (redirect) {
+      return (<Redirect to="/game" />);
+    }
     return (
       <form>
         <label htmlFor="inputName">
@@ -65,7 +82,7 @@ class Login extends React.Component {
         <button
           type="button"
           disabled={ btnValidadeFields }
-          onClick=""
+          onClick={ () => this.handleClick(name, email) }
           data-testid="btn-play"
         >
           JOGAR
@@ -75,4 +92,12 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  dispatchUserLogin: (name, email) => dispatch(userLogin(name, email)),
+});
+
+Login.propTypes = {
+  dispatchUserLogin: PropTypes.func.isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
