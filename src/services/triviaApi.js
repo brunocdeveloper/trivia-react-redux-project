@@ -9,8 +9,8 @@ export const fetchToken = async () => {
 };
 export const fetchAsks = async () => {
   try {
-    const token = await fetchToken();
-    const asksResponse = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
+    const generateToken = await fetchToken();
+    const asksResponse = await fetch(`https://opentdb.com/api.php?amount=5&token=${generateToken.token}`);
     const asks = await asksResponse.json();
     return asks;
   } catch (error) {
