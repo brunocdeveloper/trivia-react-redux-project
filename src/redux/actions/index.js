@@ -1,5 +1,3 @@
-// import { fetchAsks, fetchToken } from '../../services/triviaApi';
-
 export const USER_LOGIN = 'USER_LOGIN';
 export const CREATE_ASKS = 'CREATE_ASKS';
 
