@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { userLogin } from '../redux/actions/index';
+import { userLogin, triviaFetching } from '../redux/actions/index';
 
 class Login extends React.Component {
   constructor(props) {
@@ -43,8 +43,9 @@ class Login extends React.Component {
   }
 
   handleClick(name, email) {
-    const { dispatchUserLogin } = this.props;
+    const { dispatchUserLogin, fetchingAsks } = this.props;
     dispatchUserLogin(name, email);
+    fetchingAsks();
     this.setState({
       redirect: true,
     });
@@ -94,10 +95,12 @@ class Login extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchUserLogin: (name, email) => dispatch(userLogin(name, email)),
+  fetchingAsks: () => dispatch(triviaFetching()),
 });
 
 Login.propTypes = {
   dispatchUserLogin: PropTypes.func.isRequired,
+  fetchingAsks: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
