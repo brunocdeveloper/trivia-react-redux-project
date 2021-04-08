@@ -17,6 +17,7 @@ export const createAsks = (asks) => ({
 export const triviaFetching = () => async (dispatch) => {
   const tokenResponse = await fetch('https://opentdb.com/api_token.php?command=request');
   const token = await tokenResponse.json();
+  localStorage.setItem('token', token.token);
   const asksResponse = await fetch(`https://opentdb.com/api.php?amount=5&token=${token.token}`);
   const asks = await asksResponse.json();
   dispatch(createAsks(asks.results));
