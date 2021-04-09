@@ -9,8 +9,27 @@ class Game extends Component {
     return (
       <div>
         <Header />
-        <h1>Game</h1>
-        {asks.map((item) => (<p key={ item.category }>{item.question}</p>))}
+        {asks.map((ask, index) => (
+          <div key={ index }>
+            <p data-testid="question-category">{ ask.category }</p>
+            <p data-testid="question-text">{ ask.question }</p>
+            <button
+              type="button"
+              data-testid="correct-answer"
+            >
+              { ask.correct_answer }
+            </button>
+            {ask.incorrect_answers.map((incorrect) => (
+              <button
+                key={ incorrect }
+                type="button"
+                data-testid={ `wrong-answer-${index}` }
+              >
+                { incorrect }
+              </button>
+            ))}
+          </div>
+        ))}
       </div>
     );
   }
@@ -21,7 +40,7 @@ const mapStateToProps = (state) => ({
 });
 
 Game.propTypes = {
-  asks: PropTypes.arrayOf('').isRequired,
+  asks: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default connect(mapStateToProps)(Game);
