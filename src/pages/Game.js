@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { triviaFetching } from '../redux/actions/index';
 import Header from '../components/Header';
@@ -19,14 +20,13 @@ class Game extends Component {
     };
 
     this.answer = this.answer.bind(this);
+    this.sumPoints = this.sumPoints.bind(this);
     this.timer = this.timer.bind(this);
     this.counter = this.counter.bind(this);
     this.nextAsk = this.nextAsk.bind(this);
   }
 
   componentDidMount() {
-    // const { fetchingAsks } = this.props;
-    // fetchingAsks();
     this.setAsksState();
     this.counter();
   }
@@ -101,6 +101,33 @@ class Game extends Component {
     }
   }
 
+  sumPoints() {
+    const { asks } = this.props;
+    const localStorageData = JSON.parse(localStorage.getItem('state'));
+    const { player: { score, assertions } } = localStorageData;
+    const { countDown } = this.state;
+    const two = 2;
+    const three = 3;
+    const ten = 10;
+    switch (asks.difficulty) {
+    case asks.difficulty === 'hard':
+      localStorageData.player.score = score + ten + (countDown * three);
+      localStorageData.player.assertions = assertions + 1;
+      localStorage.setItem('state', JSON.stringify(localStorageData));
+      break;
+    case asks.difficulty === 'medium':
+      localStorageData.player.score = score + ten + (countDown * two);
+      localStorageData.player.assertions = assertions + 1;
+      localStorage.setItem('state', JSON.stringify(localStorageData));
+      break;
+    default:
+      localStorageData.player.score = score + ten + (countDown * 1);
+      localStorageData.player.assertions = assertions + 1;
+      localStorage.setItem('state', JSON.stringify(localStorageData));
+      break;
+    }
+  }
+
   render() {
     const { indexQuestion,
       loading, asks, answer, countDown, disable, redirect } = this.state;
@@ -111,18 +138,21 @@ class Game extends Component {
         <Header />
         <p>{countDown}</p>
         <div>
-          <p data-testid="question-category">{ asks[indexQuestion].category }</p>
-          <p data-testid="question-text">{ asks[indexQuestion].question }</p>
+          <p data-testid="question-category">{asks[indexQuestion].category}</p>
+          <p data-testid="question-text">{asks[indexQuestion].question}</p>
           <button
             type="button"
             data-testid="correct-answer"
             className={ answer ? 'correct' : 'dunno' }
-            onClick={ this.answer }
+            onClick={ () => {
+              this.answer();
+              this.sumPoints();
+            } }
             disabled={ disable }
           >
-            { asks[indexQuestion].correct_answer }
+            {asks[indexQuestion].correct_answer}
           </button>
-          { asks[indexQuestion].incorrect_answers.map((incorrect, index) => (
+          {asks[indexQuestion].incorrect_answers.map((incorrect, index) => (
             <button
               key={ index }
               type="button"
@@ -146,7 +176,7 @@ const mapStateToProps = (state) => ({
 });
 
 Game.propTypes = {
-  // fetchingAsks: PropTypes.func.isRequired,
+  asks: PropTypes.objectOf('').isRequired,
 };
 
 export default connect(mapStateToProps)(Game);

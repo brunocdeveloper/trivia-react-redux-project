@@ -49,6 +49,15 @@ class Login extends React.Component {
     this.setState({
       redirect: true,
     });
+    const state = {
+      player: {
+        name,
+        assertions: 0,
+        score: 0,
+        gravatarEmail: email,
+      },
+    };
+    localStorage.setItem('state', JSON.stringify(state));
   }
 
   render() {
