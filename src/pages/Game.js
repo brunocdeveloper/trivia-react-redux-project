@@ -15,11 +15,13 @@ class Game extends Component {
       answer: false,
       countDown: 30,
       disable: false,
+      redirect: false,
     };
 
     this.answer = this.answer.bind(this);
     this.timer = this.timer.bind(this);
     this.counter = this.counter.bind(this);
+    this.nextAsk = this.nextAsk.bind(this);
   }
 
   componentDidMount() {
@@ -75,9 +77,35 @@ class Game extends Component {
     });
   }
 
+  nextButton() {
+    return (
+      <button
+        type="button"
+        data-testid="btn-next"
+        onClick={ this.nextAsk }
+      >
+        próxima pergunta
+      </button>);
+  }
+
+  nextAsk() {
+    const { asks, indexQuestion } = this.state;
+    this.setState((state) => ({
+      indexQuestion: state.indexQuestion + 1,
+      answer: false,
+      countDown: 30,
+      disable: false,
+    }));
+    if (asks.length - 1 === indexQuestion) {
+      this.setState({ redirect: true });
+    }
+  }
+
   render() {
-    const { indexQuestion, loading, asks, answer, countDown, disable } = this.state;
+    const { indexQuestion,
+      loading, asks, answer, countDown, disable, redirect } = this.state;
     if (loading) return <Loading />;
+    if (redirect) return <br />;
     return (
       <div>
         <Header />
@@ -107,6 +135,7 @@ class Game extends Component {
             </button>
           ))}
         </div>
+        {(answer || disable) && this.nextButton()}
       </div>
     );
   }
