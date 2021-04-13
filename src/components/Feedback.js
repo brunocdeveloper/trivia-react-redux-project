@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Feedback extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirect: false,
+      redirectTo: '',
+    };
+
+    this.redirecting = this.redirecting.bind(this);
+  }
+
   messageFeedback() {
     const localStorageScore = JSON.parse(localStorage.getItem('state'));
     const { player: { assertions } } = localStorageScore;
@@ -15,11 +27,21 @@ class Feedback extends Component {
     }
   }
 
+  redirecting({ target }) {
+    const { name } = target;
+    this.setState({
+      redirect: true,
+      redirectTo: name,
+    });
+  }
+
   render() {
+    const { redirect, redirectTo } = this.state;
     const localStorageScore = JSON.parse(localStorage.getItem('state'));
     const { player: { score, assertions } } = localStorageScore;
     const { name, gravatar } = this.props;
     console.log(typeof assertions);
+    if (redirect) return <Redirect to={ redirectTo } />;
     return (
       <div>
         <img data-testid="header-profile-picture" src={ gravatar } alt="profile" />
@@ -32,6 +54,22 @@ class Feedback extends Component {
         <p data-testid="feedback-total-question">
           { assertions }
         </p>
+        <button
+          name="/"
+          type="button"
+          data-testid="btn-play-again"
+          onClick={ this.redirecting }
+        >
+          Jogar novamente
+        </button>
+        <button
+          name="/ranking"
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ this.redirecting }
+        >
+          Ver Ranking
+        </button>
       </div>
     );
   }
