@@ -103,7 +103,8 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchUserLogin: (name, email) => dispatch(userLogin(name, email)),
+  dispatchUserLogin: (name, email, gravatar) => (
+    dispatch(userLogin(name, email, gravatar))),
   fetchingAsks: () => dispatch(triviaFetching()),
 });
 

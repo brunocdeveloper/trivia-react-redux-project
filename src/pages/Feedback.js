@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
-import { userLogin } from '../redux/actions/index';
 
-class Header extends Component {
+class Feedback extends Component {
   constructor(props) {
     super(props);
 
@@ -12,10 +11,9 @@ class Header extends Component {
   }
 
   emailConverter() {
-    const { name, email, dispatchUserGravatar } = this.props;
+    const { email } = this.props;
     const hash = md5(email).toString();
     const gravatar = `https://www.gravatar.com/avatar/${hash}`;
-    dispatchUserGravatar(name, email, gravatar);
     return gravatar;
   }
 
@@ -28,7 +26,7 @@ class Header extends Component {
           alt="gravatar"
           data-testid="header-profile-picture"
         />
-        <p data-testid="header-player-name">{ name }</p>
+        <h1 data-testid="header-player-name">{ name }</h1>
         <p data-testid="header-score">0</p>
       </div>
     );
@@ -40,15 +38,9 @@ const mapStateToProps = (state) => ({
   name: state.loginReducer.name,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchUserGravatar: (name, email, gravatar) => (
-    dispatch(userLogin(name, email, gravatar))),
-});
-
-Header.propTypes = {
+Feedback.propTypes = {
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  dispatchUserGravatar: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps)(Feedback);
