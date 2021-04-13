@@ -12,7 +12,7 @@ class Feedback extends Component {
         <img data-testid="header-profile-picture" src={ gravatar } alt="profile" />
         <p data-testid="header-player-name">{ name }</p>
         <p data-testid="header-score">{score}</p>
-        <p data-testid="feedback-text">Mandou bem</p>
+        <p data-testid="feedback-text">Mandou bem...</p>
       </div>
     );
   }
