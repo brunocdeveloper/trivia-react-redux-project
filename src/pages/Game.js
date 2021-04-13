@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 import '../App.css';
+import Feedback from '../components/Feedback';
 
 class Game extends Component {
   constructor(props) {
@@ -132,7 +133,7 @@ class Game extends Component {
     const { indexQuestion,
       loading, asks, answer, countDown, disable, redirect } = this.state;
     if (loading) return <Loading />;
-    if (redirect) return <br />;
+    if (redirect) return <Feedback />;
     return (
       <div>
         <Header />

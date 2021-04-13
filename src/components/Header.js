@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
+import { userLogin } from '../redux/actions/index';
 
 class Header extends Component {
   constructor(props) {
@@ -11,9 +12,10 @@ class Header extends Component {
   }
 
   emailConverter() {
-    const { email } = this.props;
+    const { name, email, dispatchUserGravatar } = this.props;
     const hash = md5(email).toString();
     const gravatar = `https://www.gravatar.com/avatar/${hash}`;
+    dispatchUserGravatar(name, email, gravatar);
     return gravatar;
   }
 
@@ -38,9 +40,15 @@ const mapStateToProps = (state) => ({
   name: state.loginReducer.name,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  dispatchUserGravatar: (name, email, gravatar) => (
+    dispatch(userLogin(name, email, gravatar))),
+});
+
 Header.propTypes = {
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  dispatchUserGravatar: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
